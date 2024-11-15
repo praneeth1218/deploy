@@ -23,7 +23,7 @@ export const connectToSocket = (server) => {
     console.log("Client connected:", socket.id);
 
     // Event for joining a meeting with password validation
-    socket.on("join-meeting", async ({ meetingCode, password }) => {
+    socket.on("join-call", async ({ meetingCode, password }) => {
       try {
         const meeting = await Meeting.findOne({ meetingCode });
         if (!meeting) {
