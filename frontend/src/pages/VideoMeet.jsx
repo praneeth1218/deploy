@@ -529,46 +529,24 @@ export default function VideoMeetComponent() {
 
                 <video className={styles.meetUserVideo} ref={localVideoref} autoPlay muted></video>
 
-                <div className={styles.conferenceView}>
-                    {/* Main participant (screen-sharer or active participant) */}
-                    {videos
-                        .filter(video => video.socketId === mainParticipantId)
-                        .map(video => (
-                            <video
-                                key={video.socketId}
-                                className={styles.mainParticipant}
-                                data-socket={video.socketId}
-                                data-screen-share={video.stream.getVideoTracks()[0].kind === 'video' && 
-                                    video.stream.getVideoTracks()[0].label.includes('screen')}
-                                ref={ref => {
-                                    if (ref && video.stream) {
-                                        ref.srcObject = video.stream;
-                                    }
-                                }}
-                                autoPlay
-                            />
-                        ))}
-
-                    {/* Other participants */}
-                    {videos
-                        .filter(video => video.socketId !== mainParticipantId)
-                        .map(video => (
-                            <video
-                                key={video.socketId}
-                                className={styles.otherParticipants}
-                                data-socket={video.socketId}
-                                ref={ref => {
-                                    if (ref && video.stream) {
-                                        ref.srcObject = video.stream;
-                                    }
-                                }}
-                                autoPlay
-                            />
-                        ))}
-                </div>
+               <div className={styles.conferenceView}>
+    {videos.map((video) => (
+        <video
+            key={video.socketId}
+            data-socket={video.socketId}
+            data-screen-share={video.stream.getVideoTracks()[0].kind === 'video' && 
+                             video.stream.getVideoTracks()[0].label.includes('screen')}
+            ref={ref => {
+                if (ref && video.stream) {
+                    ref.srcObject = video.stream;
+                }
+            }}
+            autoPlay
+        />
+    ))}
+</div>
             </div>
         )}
     </div>
 );
-
 }
