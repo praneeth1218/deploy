@@ -494,9 +494,7 @@ const stopScreenShare = () => {
             getDislayMedia();
         }
     }, [screen])
-    let handleScreen = () => {
-        setScreen(!screen);
-    }
+   
 
     let handleEndCall = () => {
         try {
