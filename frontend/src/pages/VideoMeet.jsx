@@ -39,7 +39,7 @@ export default function VideoMeetComponent() {
     let [audio, setAudio] = useState();
 
     let [screen, setScreen] = useState();
-
+    const [mainParticipantId, setMainParticipantId] = useState(null);
     let [isScreenSharing, setIsScreenSharing] = useState(false);
 
     let [showModal, setModal] = useState(true);
@@ -82,7 +82,14 @@ export default function VideoMeetComponent() {
             }
         }
     }
-
+     useEffect(() => {
+        if (screenShareParticipant) {
+            setMainParticipantId(screenShareParticipant.id);
+        } else {
+            // Optionally set the first participant as the default main participant
+            setMainParticipantId(participants.length > 0 ? participants[0].id : null);
+        }
+    }, [screenShareParticipant, participants]);
     const getPermissions = async () => {
         try {
             const videoPermission = await navigator.mediaDevices.getUserMedia({ video: true });
@@ -449,7 +456,7 @@ export default function VideoMeetComponent() {
     }
 
 
-    return (
+   return (
     <div>
         {askForUsername === true ? (
             <div>
@@ -522,24 +529,46 @@ export default function VideoMeetComponent() {
 
                 <video className={styles.meetUserVideo} ref={localVideoref} autoPlay muted></video>
 
-               <div className={styles.conferenceView}>
-    {videos.map((video) => (
-        <video
-            key={video.socketId}
-            data-socket={video.socketId}
-            data-screen-share={video.stream.getVideoTracks()[0].kind === 'video' && 
-                             video.stream.getVideoTracks()[0].label.includes('screen')}
-            ref={ref => {
-                if (ref && video.stream) {
-                    ref.srcObject = video.stream;
-                }
-            }}
-            autoPlay
-        />
-    ))}
-</div>
+                <div className={styles.conferenceView}>
+                    {/* Main participant (screen-sharer or active participant) */}
+                    {videos
+                        .filter(video => video.socketId === mainParticipantId)
+                        .map(video => (
+                            <video
+                                key={video.socketId}
+                                className={styles.mainParticipant}
+                                data-socket={video.socketId}
+                                data-screen-share={video.stream.getVideoTracks()[0].kind === 'video' && 
+                                    video.stream.getVideoTracks()[0].label.includes('screen')}
+                                ref={ref => {
+                                    if (ref && video.stream) {
+                                        ref.srcObject = video.stream;
+                                    }
+                                }}
+                                autoPlay
+                            />
+                        ))}
+
+                    {/* Other participants */}
+                    {videos
+                        .filter(video => video.socketId !== mainParticipantId)
+                        .map(video => (
+                            <video
+                                key={video.socketId}
+                                className={styles.otherParticipants}
+                                data-socket={video.socketId}
+                                ref={ref => {
+                                    if (ref && video.stream) {
+                                        ref.srcObject = video.stream;
+                                    }
+                                }}
+                                autoPlay
+                            />
+                        ))}
+                </div>
             </div>
         )}
     </div>
 );
+
 }
