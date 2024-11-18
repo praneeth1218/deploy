@@ -43,6 +43,9 @@ export default function VideoMeetComponent() {
     let [isScreenSharing, setIsScreenSharing] = useState(false);
 
     let [showModal, setModal] = useState(true);
+    const [screenShareParticipant, setScreenShareParticipant] = useState(null); // Tracks screen-sharing participant
+const [mainParticipantId, setMainParticipantId] = useState(null); // Tracks main participant
+const [participants, setParticipants] = useState([]); // Tracks all participants
 
     let [screenAvailable, setScreenAvailable] = useState();
     const [isScreenShare, setIsScreenShare] = useState(false);
