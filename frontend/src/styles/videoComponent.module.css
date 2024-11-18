@@ -2,91 +2,52 @@
     position: relative;
     height: 100vh;
     background: rgb(1, 4, 48);
-    overflow: hidden;
 }
+
 
 .meetUserVideo {
     position: absolute;
     bottom: 10vh;
-    height: 15vh;
+    height: 15vh; 
     width: auto;
     left: 10px;
     border-radius: 20px;
-    z-index: 10;
-    transition: all 0.3s ease;
+    z-index: 10; 
 }
 
-.conferenceView {
-    display: flex;
-    height: calc(100vh - 15vh);
-    padding: 20px;
-    gap: 10px;
-}
-
-/* Default layout without screen sharing */
-.conferenceView video {
-    width: 30vw;
-    height: auto;
-    min-width: 200px;
-    max-height: 40vh;
-    border-radius: 10px;
-    transition: all 0.3s ease;
-}
-
-/* Layout when screen sharing is active */
-.hasScreenShare {
-    display: grid;
-    grid-template-columns: 70% 30%;
-    gap: 10px;
-    padding: 20px;
-    height: calc(100vh - 15vh);
-}
-
-.screenShareContainer {
-    grid-column: 1;
-    width: 100%;
-    height: 100%;
-}
-
-.screenShareContainer video {
-    width: 100%;
-    height: 100%;
-    object-fit: contain;
-    border-radius: 10px;
-}
-
-.participantsContainer {
-    width: 100%;
-}
-
-/* Participants side panel when screen sharing */
-.hasScreenShare .participantsContainer {
-    grid-column: 2;
-    display: flex;
-    flex-direction: column;
-    gap: 10px;
-    overflow-y: auto;
-}
-
-.hasScreenShare .participantsContainer video {
-    width: 100%;
-    max-height: 20vh;
-    object-fit: cover;
-}
 
 .buttonContainers {
     position: absolute;
     width: 100vw;
     bottom: 0;
     text-align: center;
-    z-index: 20;
 }
 
 .buttonContainers svg {
     font-size: 3rem;
 }
 
-/* Chat room styles remain unchanged */
+
+.conferenceView { 
+    display: flex;
+    flex-wrap: wrap; 
+    justify-content: center; 
+    align-items: flex-start; 
+    padding: 10px;
+    gap: 10px;
+    height: calc(100vh - 15vh); 
+    overflow-y: auto; 
+}
+
+.conferenceView video {
+    width: 30vw; 
+    height: auto; 
+    min-width: 200px;
+    max-height: 40vh;
+    border-radius: 10px;
+}
+
+
 .chatRoom {
     position: absolute;
     height: 90vh;
@@ -95,4 +56,14 @@
     border-radius: 10px;
     width: 30vw;
     padding-inline: 20px;
+}
+
+.chatContainer {
+    position: relative;
+    height: 100%;
+}
+
+.chattingArea {
+    position: absolute;
+    bottom: 0;
 }
