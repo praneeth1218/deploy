@@ -525,7 +525,8 @@ export default function VideoMeetComponent() {
 
                     <video className={styles.meetUserVideo} ref={localVideoref} autoPlay muted></video>
 
-                 <div className={`${styles.conferenceView} ${videos.some(v => v.isScreenShare) ? styles.hasScreenShare : ''}`}>
+                 // Modify the video rendering logic in the VideoMeetComponent
+<div className={`${styles.conferenceView} ${videos.some(v => v.isScreenShare) ? styles.hasScreenShare : ''}`}>
     {videos.some(v => v.isScreenShare) ? (
         <>
             <div className="screenShareContainer">
@@ -544,17 +545,16 @@ export default function VideoMeetComponent() {
             </div>
             <div className="participantsContainer">
                 {videos.filter(v => !v.isScreenShare).map((video) => (
-                 <video
-    data-socket={video.socketId}
-    data-is-screenshare={video.stream.getVideoTracks()[0].label.includes('screen') ? "true" : "false"}
-    ref={ref => {
-        if (ref && video.stream) {
-            ref.srcObject = video.stream;
-        }
-    }}
-    autoPlay
->
-</video>
+                    <video
+                        key={video.socketId}
+                        data-socket={video.socketId}
+                        ref={ref => {
+                            if (ref && video.stream) {
+                                ref.srcObject = video.stream;
+                            }
+                        }}
+                        autoPlay
+                    />
                 ))}
             </div>
         </>
