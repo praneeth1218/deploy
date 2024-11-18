@@ -34,28 +34,33 @@
 }
 
 /* When screen sharing is active */
+/* When screen sharing is active */
 .conferenceView.hasScreenShare {
-    grid-template-columns: 70% 30%;
+    display: grid;
+    grid-template-columns: 70vw 1fr; /* Use viewport width to ensure full screen width */
+    gap: 20px;
+    padding: 20px;
+    height: calc(100vh - 15vh);
 }
 
-.conferenceView .screenShareContainer {
-    grid-column: 1;
+.conferenceView.hasScreenShare .screenShareContainer {
+    width: 70vw; /* Explicitly set width to 70% of viewport width */
     display: flex;
     justify-content: center;
     align-items: center;
     max-height: 85vh;
-    width: 100%; /* Ensure the screen share container takes up 70% of the width */
 }
 
-.conferenceView .screenShareContainer video {
+.conferenceView.hasScreenShare .screenShareContainer video {
     width: 100%;
     height: auto;
     max-height: 85vh;
+    max-width: 70vw; /* Ensure it doesn't exceed 70% of screen width */
     object-fit: contain;
 }
 
-.conferenceView .participantsContainer {
-    grid-column: 2;
+.conferenceView.hasScreenShare .participantsContainer {
+    width: calc(30vw - 20px); /* Remaining width, accounting for gap */
     display: grid;
     grid-template-columns: 1fr;
     gap: 10px;
