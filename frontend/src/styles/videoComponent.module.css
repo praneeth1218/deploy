@@ -27,10 +27,15 @@
 
 .conferenceView {
     display: grid;
-    grid-template-columns: 65% 1fr;
+    grid-template-columns: 1fr;
     gap: 20px;
     padding: 20px;
     height: calc(100vh - 15vh);
+}
+
+/* When screen sharing is active */
+.conferenceView.hasScreenShare {
+    grid-template-columns: 70% 30%;
 }
 
 .conferenceView .screenShareContainer {
@@ -38,6 +43,7 @@
     display: flex;
     justify-content: center;
     align-items: center;
+    max-height: 85vh;
 }
 
 .conferenceView .screenShareContainer video {
@@ -49,16 +55,17 @@
 
 .conferenceView .participantsContainer {
     grid-column: 2;
-    display: flex;
-    flex-direction: column;
-    gap: 15px;
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 10px;
     overflow-y: auto;
+    max-height: 85vh;
 }
 
 .conferenceView .participantsContainer video {
     width: 100%;
     height: auto;
-    max-height: 25vh;
+    max-height: 200px; /* Reduced size for participants */
     object-fit: cover;
     border-radius: 10px;
 }
@@ -95,4 +102,19 @@
 .chatRoom + .conferenceView {
     grid-template-columns: 50% 1fr;
     padding-right: 32%;
+}
+
+/* When no screen sharing is active, arrange videos in a grid */
+.conferenceView:not(.hasScreenShare) {
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    grid-auto-rows: auto;
+    gap: 15px;
+}
+
+.conferenceView:not(.hasScreenShare) video {
+    width: 100%;
+    height: auto;
+    max-height: 300px;
+    object-fit: cover;
+    border-radius: 10px;
 }
