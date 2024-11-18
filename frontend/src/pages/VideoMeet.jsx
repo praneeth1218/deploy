@@ -512,44 +512,45 @@ export default function VideoMeetComponent() {
                     </IconButton>
                     {screenAvailable === true && (
                         <IconButton
-                onClick={async () => {
-                    if (!isScreenSharing) {
-                        try {
-                            const screenStream = await navigator.mediaDevices.getDisplayMedia({ video: true });
-                            sharedScreenRef.current.srcObject = screenStream;
-                            setIsScreenSharing(true);
+    onClick={async () => {
+        if (!isScreenSharing) {
+            try {
+                const screenStream = await navigator.mediaDevices.getDisplayMedia({ video: true });
+                sharedScreenRef.current.srcObject = screenStream;
+                setIsScreenSharing(true);
 
-                            screenStream.getVideoTracks()[0].onended = () => {
-                                setIsScreenSharing(false);
-                                sharedScreenRef.current.srcObject = null;
-                            };
-                        } catch (error) {
-                            console.error("Error starting screen share:", error);
-                        }
-                    } else {
-                        setIsScreenSharing(false);
-                        sharedScreenRef.current.srcObject = null;
-                    }
-                }}
-                style={{ color: "white" }}
-            >
-                {isScreenSharing ? <StopScreenShareIcon /> : <ScreenShareIcon />}
-            </IconButton>
+                screenStream.getVideoTracks()[0].onended = () => {
+                    setIsScreenSharing(false);
+                    sharedScreenRef.current.srcObject = null;
+                };
+            } catch (error) {
+                console.error("Error starting screen share:", error);
+            }
+        } else {
+            setIsScreenSharing(false);
+            sharedScreenRef.current.srcObject = null;
+        }
+    }}
+    style={{ color: "white" }}
+>
+    {isScreenSharing ? <StopScreenShareIcon /> : <ScreenShareIcon />}
+</IconButton>
 
-            {isScreenSharing ? (
-                <div className={styles.screenShareMode}>
-                    <div className={styles.sharedScreen}>
-                        <video ref={sharedScreenRef} autoPlay muted></video>
-                    </div>
-                    <div className={styles.participantsView}>
-                        {/* Render participant videos */}
-                    </div>
-                </div>
-            ) : (
-                <div className={styles.conferenceView}>
-                    {/* Render conference view */}
-                </div>
-            )}
+{isScreenSharing ? (
+    <div className={styles.screenShareMode}>
+        <div className={styles.sharedScreen}>
+            <video ref={sharedScreenRef} autoPlay muted></video>
+        </div>
+        <div className={styles.participantsView}>
+            {/* Render participant videos */}
+        </div>
+    </div>
+) : (
+    <div className={styles.conferenceView}>
+        {/* Render conference view */}
+    </div>
+)}
+
 
                     )}
                     <Badge badgeContent={newMessages} max={999} color="orange">
