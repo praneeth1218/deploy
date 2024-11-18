@@ -37,8 +37,7 @@ export default function VideoMeetComponent() {
     let [video, setVideo] = useState([]);
 
     let [audio, setAudio] = useState();
-    const [isScreenSharing, setIsScreenSharing] = useState(false);
-    const sharedScreenRef = useRef(null);
+
     let [screen, setScreen] = useState();
 
     let [showModal, setModal] = useState(true);
@@ -270,106 +269,9 @@ export default function VideoMeetComponent() {
             }
         }
     }
-      const enterFullScreen = (element) => {
-        if (element.requestFullscreen) {
-            element.requestFullscreen();
-        } else if (element.mozRequestFullScreen) { // Firefox
-            element.mozRequestFullScreen();
-        } else if (element.webkitRequestFullscreen) { // Chrome, Safari and Opera
-            element.webkitRequestFullscreen();
-        } else if (element.msRequestFullscreen) { // IE/Edge
-            element.msRequestFullscreen();
-        }
-    };
 
-    // Exit full-screen function
-    const exitFullScreen = () => {
-        if (document.exitFullscreen) {
-            document.exitFullscreen();
-        } else if (document.mozCancelFullScreen) {
-            document.mozCancelFullScreen();
-        } else if (document.webkitExitFullscreen) {
-            document.webkitExitFullscreen();
-        } else if (document.msExitFullscreen) {
-            document.msExitFullscreen();
-        }
-    };
 
-    // Handle screen share
-    const handleScreen = () => {
-        if (!screen) {
-            // Start screen sharing
-            startScreenShare();
-            setScreen(true);
-            enterFullScreen(document.documentElement); // Enter full screen when sharing starts
-        } else {
-            // Stop screen sharing
-            stopScreenShare();
-            setScreen(false);
-            exitFullScreen(); // Exit full screen when sharing stops
-        }
-    };
-    // Start screen share function
-const startScreenShare = async () => {
-    try {
-        // Request to get the display media (screen)
-        const screenStream = await navigator.mediaDevices.getDisplayMedia({ video: true });
 
-        // Set the screen stream to the local video reference
-        localVideoref.current.srcObject = screenStream;
-
-        // Add the screen stream to all peer connections
-        for (let id in connections) {
-            if (id === socketIdRef.current) continue;
-
-            // Add the screen stream to the connection
-            connections[id].addStream(screenStream);
-
-            // Create an offer and send it to the other user
-            connections[id].createOffer().then((description) => {
-                connections[id].setLocalDescription(description).then(() => {
-                    socketRef.current.emit('signal', id, JSON.stringify({ 'sdp': connections[id].localDescription }));
-                }).catch(e => console.log(e));
-            }).catch(e => console.log(e));
-        }
-
-        // Handle track ending event
-        screenStream.getVideoTracks()[0].onended = () => {
-            stopScreenShare(); // Stop screen sharing if the track ends
-        };
-
-        setIsScreenSharing(true); // Update the state to indicate screen sharing is active
-    } catch (error) {
-        console.error("Error starting screen share:", error);
-    }
-};
-
-// Stop screen share function
-const stopScreenShare = () => {
-    // Stop all tracks in the screen stream
-    const tracks = localVideoref.current.srcObject.getTracks();
-    tracks.forEach(track => track.stop());
-
-    // Reset the video source to the local stream
-    if (window.localStream) {
-        localVideoref.current.srcObject = window.localStream;
-    }
-
-    // Notify all peers that screen sharing has stopped
-    for (let id in connections) {
-        if (id === socketIdRef.current) continue;
-
-        // Create an offer to reset the connection
-        connections[id].addStream(window.localStream);
-        connections[id].createOffer().then((description) => {
-            connections[id].setLocalDescription(description).then(() => {
-                socketRef.current.emit('signal', id, JSON.stringify({ 'sdp': connections[id].localDescription }));
-            }).catch(e => console.log(e));
-        }).catch(e => console.log(e));
-    }
-
-    setIsScreenSharing(false); // Update the state to indicate screen sharing is stopped
-};
 
     let connectToSocketServer = () => {
         socketRef.current = io.connect(server_url, { secure: false })
@@ -494,7 +396,9 @@ const stopScreenShare = () => {
             getDislayMedia();
         }
     }, [screen])
-   
+    let handleScreen = () => {
+        setScreen(!screen);
+    }
 
     let handleEndCall = () => {
         try {
@@ -542,7 +446,7 @@ const stopScreenShare = () => {
     }
 
 
-   return (
+    return (
         <div>
 
             {askForUsername === true ?
@@ -621,26 +525,54 @@ const stopScreenShare = () => {
 
                     <video className={styles.meetUserVideo} ref={localVideoref} autoPlay muted></video>
 
-                    <div className={styles.conferenceView}>
-                        {videos.map((video) => (
-                            <div key={video.socketId}>
-                                <video
-
-                                    data-socket={video.socketId}
-                                    ref={ref => {
-                                        if (ref && video.stream) {
-                                            ref.srcObject = video.stream;
-                                        }
-                                    }}
-                                    autoPlay
-                                >
-                                </video>
-                            </div>
-
-                        ))}
-
-                    </div>
-
+                 <div className={`${styles.conferenceView} ${videos.some(v => v.isScreenShare) ? styles.hasScreenShare : ''}`}>
+    {videos.some(v => v.isScreenShare) ? (
+        <>
+            <div className="screenShareContainer">
+                {videos.filter(v => v.isScreenShare).map((video) => (
+                    <video
+                        key={video.socketId}
+                        data-socket={video.socketId}
+                        ref={ref => {
+                            if (ref && video.stream) {
+                                ref.srcObject = video.stream;
+                            }
+                        }}
+                        autoPlay
+                    />
+                ))}
+            </div>
+            <div className="participantsContainer">
+                {videos.filter(v => !v.isScreenShare).map((video) => (
+                 <video
+    data-socket={video.socketId}
+    data-is-screenshare={video.stream.getVideoTracks()[0].label.includes('screen') ? "true" : "false"}
+    ref={ref => {
+        if (ref && video.stream) {
+            ref.srcObject = video.stream;
+        }
+    }}
+    autoPlay
+>
+</video>
+                ))}
+            </div>
+        </>
+    ) : (
+        videos.map((video) => (
+            <video
+                key={video.socketId}
+                data-socket={video.socketId}
+                ref={ref => {
+                    if (ref && video.stream) {
+                        ref.srcObject = video.stream;
+                    }
+                }}
+                autoPlay
+            />
+        ))
+    )}
+</div>
                 </div>
 
             }
