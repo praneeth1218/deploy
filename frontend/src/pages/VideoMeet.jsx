@@ -524,20 +524,16 @@ export default function VideoMeetComponent() {
 
                 <div className={`${styles.conferenceView} ${isScreenSharing ? styles.hasScreenShare : ''}`}>
                     {videos.map((video) => (
-                        <div 
-                            key={video.socketId} 
-                            className={video.isScreenShare ? styles.screenShareContainer : styles.participantsContainer}
-                        >
-                            <video
-                                data-socket={video.socketId}
-                                ref={ref => {
-                                    if (ref && video.stream) {
-                                        ref.srcObject = video.stream;
-                                    }
-                                }}
-                                autoPlay
-                            />
-                        </div>
+                         <video
+            key={video.socketId}
+            data-socket={video.socketId}
+            ref={ref => {
+                if (ref && video.stream) {
+                    ref.srcObject = video.stream;
+                }
+            }}
+            autoPlay
+        />
                     ))}
                 </div>
             </div>
