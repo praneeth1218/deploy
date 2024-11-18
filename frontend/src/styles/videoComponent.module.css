@@ -4,14 +4,14 @@
     background: rgb(1, 4, 48);
 }
 
-.meetUser Video {
+.meetUserVideo {
     position: absolute;
     bottom: 10vh;
-    height: 15vh; 
+    height: 15vh;
     width: auto;
     left: 10px;
     border-radius: 20px;
-    z-index: 10; 
+    z-index: 10;
 }
 
 .buttonContainers {
@@ -30,43 +30,45 @@
     grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
     gap: 20px;
     padding: 20px;
-    height: calc(100vh - 15vh); /* Adjust height based on user video */
+    height: calc(100vh - 15vh);
 }
 
 /* When screen sharing is active */
 .conferenceView.hasScreenShare {
-    grid-template-columns: 70% 30%; /* 70% for screen share, 30% for participants */
-    height: 100vh; /* Ensure conference view takes full height */
+    grid-template-columns: 70% 30%;
 }
 
 .conferenceView .screenShareContainer {
-    grid-column: 1; /* Screen share occupies the first column */
+    grid-column: 1;
     display: flex;
     justify-content: center;
     align-items: center;
-    height: 100%; /* Ensure it takes full height */
-    width: 100%; /* Ensure it takes full width */
+    max-height: 85vh;
+    width: 100%;
+    /* Ensure the screen share container takes up 70% of the width */
 }
 
 .conferenceView .screenShareContainer video {
-    width: 100%; /* Full width for screen share */
-    height: 100%; /* Full height for screen share */
-    object-fit: contain; /* Maintain aspect ratio */
+    width: 100%;
+    height: auto;
+    max-height: 85vh;
+    object-fit: contain;
 }
 
 .conferenceView .participantsContainer {
-    grid-column: 2; /* Participants occupy the second column */
+    grid-column: 2;
     display: grid;
     grid-template-columns: 1fr;
     gap: 10px;
     overflow-y: auto;
-    max-height: 85vh; /* Adjust as necessary */
+    max-height: 85vh;
 }
 
 .conferenceView .participantsContainer video {
     width: 100%;
     height: auto;
-    max-height: 150px; /* Reduced size for participants */
+    max-height: 150px;
+    /* Reduced size for participants */
     object-fit: cover;
     border-radius: 10px;
 }
