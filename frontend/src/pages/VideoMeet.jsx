@@ -144,7 +144,15 @@ export default function VideoMeetComponent() {
         try {
             window.localStream.getTracks().forEach(track => track.stop())
         } catch (e) { console.log(e) }
-
+         try {
+        if (localVideoref.current) {
+            window.localStream.getTracks().forEach(track => track.stop());
+            window.localStream = stream;
+            localVideoref.current.srcObject = stream; // Check if ref is not null
+        }
+    } catch (e) {
+        console.log(e);
+    }
         window.localStream = stream
         localVideoref.current.srcObject = stream
 
