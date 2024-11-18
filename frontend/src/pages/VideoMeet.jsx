@@ -45,7 +45,7 @@ export default function VideoMeetComponent() {
     let [showModal, setModal] = useState(true);
 
     let [screenAvailable, setScreenAvailable] = useState();
-
+    const [isScreenShare, setIsScreenShare] = useState(false);
     let [messages, setMessages] = useState([])
 
     let [message, setMessage] = useState("");
@@ -142,6 +142,13 @@ export default function VideoMeetComponent() {
 
 
     }, [video, audio])
+    const getScreenShareVideo = (videos) => {
+        return videos.find(video => video.isScreenShare);
+    };
+
+    const getParticipantVideos = (videos) => {
+        return videos.filter(video => !video.isScreenShare);
+    };
     let getMedia = () => {
         setVideo(videoAvailable);
         setAudio(audioAvailable);
@@ -577,23 +584,23 @@ export default function VideoMeetComponent() {
                
                     <div className={`${styles.conferenceView} ${isScreenSharing ? styles.hasScreenShare : ''}`}>
                         {/* Screen share video */}
-                        {videos.filter(video => video.isScreenShare).map((video) => (
-                            <div key={video.socketId} className={styles.screenShareContainer}>
+                        {getScreenShareVideo(videos) && (
+                            <div className={styles.screenShareContainer}>
                                 <video
-                                    data-socket={video.socketId}
+                                    data-socket={getScreenShareVideo(videos).socketId}
                                     ref={ref => {
-                                        if (ref && video.stream) {
-                                            ref.srcObject = video.stream;
+                                        if (ref && getScreenShareVideo(videos).stream) {
+                                            ref.srcObject = getScreenShareVideo(videos).stream;
                                         }
                                     }}
                                     autoPlay
                                     playsInline
                                 />
                             </div>
-                        ))}
+                        )}
                         
                         {/* Participant videos */}
-                        {videos.filter(video => !video.isScreenShare).map((video) => (
+                        {getParticipantVideos(videos).map((video) => (
                             <div key={video.socketId} className={styles.participantsContainer}>
                                 <video
                                     data-socket={video.socketId}
