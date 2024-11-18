@@ -4,8 +4,7 @@
     background: rgb(1, 4, 48);
 }
 
-
-.meetUserVideo {
+.meetUser Video {
     position: absolute;
     bottom: 10vh;
     height: 15vh; 
@@ -13,8 +12,8 @@
     left: 10px;
     border-radius: 20px;
     z-index: 10; 
+    transition: all 0.3s ease; /* Smooth transition */
 }
-
 
 .buttonContainers {
     position: absolute;
@@ -26,7 +25,6 @@
 .buttonContainers svg {
     font-size: 3rem;
 }
-
 
 .conferenceView { 
     display: flex;
@@ -45,8 +43,25 @@
     min-width: 200px;
     max-height: 40vh;
     border-radius: 10px;
+    transition: all 0.3s ease; /* Smooth transition */
 }
 
+/* New classes for maximizing and minimizing */
+.video-maximized {
+    position: fixed; /* Cover the entire viewport */
+    top: 0;
+    left: 0;
+    width: 100vw; /* Full width */
+    height: 100vh; /* Full height */
+    z-index: 100; /* Above other elements */
+    border-radius: 0; /* Remove border radius */
+}
+
+.video-minimized {
+    width: 15vw; /* Reduced width for minimized state */
+    max-height: 10vh; /* Max height for minimized state */
+    z-index: 10; /* Ensure it stays above other elements but below maximized */
+}
 
 .chatRoom {
     position: absolute;
