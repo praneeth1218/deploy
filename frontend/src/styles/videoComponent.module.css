@@ -26,43 +26,41 @@
 }
 
 .conferenceView {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-    gap: 20px;
-    padding: 20px;
-    height: calc(100vh - 15vh);
+    width: 100vw; /* Ensure container is full viewport width */
+    max-width: 100vw; /* Prevent any potential overflow */
 }
 
 .conferenceView.hasScreenShare {
     display: flex;
-    width: 100vw; /* Full screen width */
-    height: calc(100vh - 15vh); /* Adjust height as needed */
+    width: 100vw;
+    max-width: 100vw;
+    height: calc(100vh - 15vh);
 }
 
-.conferenceView .screenShareContainer {
-    width: 70vw; /* Literally 70% of the entire screen width */
+.conferenceView.hasScreenShare .screenShareContainer {
+    width: 70%; /* Percentage relative to VIEWPORT, not container */
+    min-width: 70vw; /* Explicit viewport width */
     height: 100%;
     display: flex;
     justify-content: center;
     align-items: center;
 }
 
-.conferenceView .screenShareContainer video {
-    max-width: 100%;
-    max-height: 100%;
+.conferenceView.hasScreenShare .screenShareContainer video {
+    width: 100%;
+    height: 100%;
     object-fit: contain;
 }
 
-.conferenceView .participantsContainer {
-    width: calc(30vw); /* Remaining 30% of screen width */
+.conferenceView.hasScreenShare .participantsContainer {
+    width: 30%; /* Percentage relative to VIEWPORT */
+    min-width: 30vw;
     height: 100%;
     display: grid;
-    grid-template-columns: 1fr 1fr; /* Two columns for participants */
+    grid-template-columns: 1fr;
     gap: 10px;
     overflow-y: auto;
-    padding: 10px;
 }
-
 .conferenceView .participantsContainer video {
     width: 100%;
     height: 150px;
