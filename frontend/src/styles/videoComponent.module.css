@@ -4,7 +4,6 @@
     background: rgb(1, 4, 48);
 }
 
-
 .meetUserVideo {
     position: absolute;
     bottom: 10vh;
@@ -14,7 +13,6 @@
     border-radius: 20px;
     z-index: 10; 
 }
-
 
 .buttonContainers {
     position: absolute;
@@ -27,11 +25,11 @@
     font-size: 3rem;
 }
 
-
+/* Modified conference view layout */
 .conferenceView { 
     display: flex;
     flex-wrap: wrap; 
-    justify-content: center; 
+    justify-content: flex-start; 
     align-items: flex-start; 
     padding: 10px;
     gap: 10px;
@@ -39,14 +37,29 @@
     overflow-y: auto; 
 }
 
+/* Default video size */
 .conferenceView video {
     width: 30vw; 
     height: auto; 
     min-width: 200px;
     max-height: 40vh;
     border-radius: 10px;
+    transition: all 0.3s ease;
 }
 
+/* Special styling for screen share video */
+.conferenceView video[data-screen-share="true"] {
+    width: 65vw;
+    max-height: 70vh;
+    order: -1; /* Makes sure screen share is first */
+}
+
+/* Adjust other videos when screen sharing is active */
+.conferenceView.hasScreenShare video:not([data-screen-share="true"]) {
+    width: calc(30vw - 20px);
+    max-height: 25vh;
+    margin-left: 10px;
+}
 
 .chatRoom {
     position: absolute;
@@ -56,6 +69,7 @@
     border-radius: 10px;
     width: 30vw;
     padding-inline: 20px;
+    z-index: 20;
 }
 
 .chatContainer {
@@ -66,4 +80,23 @@
 .chattingArea {
     position: absolute;
     bottom: 0;
+    width: calc(100% - 40px);
+    padding: 20px 0;
+    display: flex;
+    gap: 10px;
+}
+
+.chattingDisplay {
+    height: calc(90vh - 200px);
+    overflow-y: auto;
+    padding: 20px 0;
+}
+
+/* Adjust layout when chat is open */
+.chatRoom + .conferenceView video[data-screen-share="true"] {
+    width: 45vw;
+}
+
+.chatRoom + .conferenceView.hasScreenShare video:not([data-screen-share="true"]) {
+    width: calc(20vw - 20px);
 }
