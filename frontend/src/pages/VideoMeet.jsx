@@ -40,6 +40,8 @@ export default function VideoMeetComponent() {
 
     let [screen, setScreen] = useState();
 
+    let [isScreenSharing, setIsScreenSharing] = useState(false);
+
     let [showModal, setModal] = useState(true);
 
     let [screenAvailable, setScreenAvailable] = useState();
@@ -397,8 +399,9 @@ export default function VideoMeetComponent() {
         }
     }, [screen])
     let handleScreen = () => {
-        setScreen(!screen);
-    }
+    setScreen(!screen);
+    setIsScreenSharing(!screen);
+}
 
     let handleEndCall = () => {
         try {
@@ -525,21 +528,22 @@ export default function VideoMeetComponent() {
 
                     <video className={styles.meetUserVideo} ref={localVideoref} autoPlay muted></video>
 
-                    <div className={styles.conferenceView}>
-                        {videos.map((video) => (
-                            <div key={video.socketId}>
-                                <video
-
-                                    data-socket={video.socketId}
-                                    ref={ref => {
-                                        if (ref && video.stream) {
-                                            ref.srcObject = video.stream;
-                                        }
-                                    }}
-                                    autoPlay
-                                >
-                                </video>
-                            </div>
+                    <div className={`${styles.conferenceView} ${isScreenSharing ? styles.hasScreenShare : ''}`}>
+    {videos.map((video) => (
+        <div key={video.socketId} className={video.isScreenShare ? styles.screenShareContainer : styles.participantsContainer}>
+            <video
+                data-socket={video.socketId}
+                ref={ref => {
+                    if (ref && video.stream) {
+                        ref.srcObject = video.stream;
+                    }
+                }}
+                autoPlay
+            >
+            </video>
+        </div>
+    ))}
+</div>
 
                         ))}
 
