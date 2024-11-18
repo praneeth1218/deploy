@@ -35,28 +35,28 @@
     height: calc(100vh - 15vh); 
 }
 
-/* Specific styling for videos when screen sharing is active */
+/* When screen sharing is happening */
 .conferenceView video[data-is-screenshare="true"] {
-    width: 65% !important;
-    height: auto !important;
-    max-height: 75vh !important;
+    width: 85% !important; /* Much larger width for screen share */
+    height: 85vh !important;
+    object-fit: contain !important;
 }
 
-/* Regular participant videos when screen sharing is active */
+/* Participant videos during screen share */
 .conferenceView video:not([data-is-screenshare="true"]) {
-    width: calc(30% - 10px) !important;
+    width: 13% !important; /* Smaller width for participant videos */
     height: auto !important;
-    max-height: 20vh !important;
+    max-height: 28vh !important;
+    object-fit: cover;
 }
 
-/* Default video styling when no screen sharing */
+/* Default video styling (when no screen sharing) */
 .conferenceView video {
     width: 30vw;
     height: auto;
     min-width: 200px;
     max-height: 40vh;
     border-radius: 10px;
-    object-fit: contain;
 }
 
 .chatRoom {
@@ -86,11 +86,12 @@
     padding: 20px 0;
 }
 
-/* When chat is open and screen sharing */
+/* Adjust sizes when chat is open */
 .chatRoom + .conferenceView video[data-is-screenshare="true"] {
-    width: 45% !important;
+    width: 60% !important;
+    height: 85vh !important;
 }
 
 .chatRoom + .conferenceView video:not([data-is-screenshare="true"]) {
-    width: calc(20% - 10px) !important;
+    width: 8% !important;
 }
