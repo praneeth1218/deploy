@@ -4,7 +4,6 @@
     background: rgb(1, 4, 48);
 }
 
-
 .meetUserVideo {
     position: absolute;
     bottom: 10vh;
@@ -15,39 +14,77 @@
     z-index: 10; 
 }
 
-
 .buttonContainers {
     position: absolute;
     width: 100vw;
     bottom: 0;
     text-align: center;
+    z-index: 20;
 }
 
 .buttonContainers svg {
     font-size: 3rem;
 }
 
-
+/* Main conference view container */
 .conferenceView { 
-    display: flex;
-    flex-wrap: wrap; 
-    justify-content: center; 
-    align-items: flex-start; 
-    padding: 10px;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
     gap: 10px;
-    height: calc(100vh - 15vh); 
-    overflow-y: auto; 
+    padding: 10px;
+    height: calc(100vh - 15vh);
+    overflow-y: auto;
 }
 
+/* Default video styling */
 .conferenceView video {
-    width: 30vw; 
-    height: auto; 
+    width: 100%;
+    height: auto;
     min-width: 200px;
     max-height: 40vh;
     border-radius: 10px;
+    object-fit: cover;
 }
 
+/* Screen share layout modifications */
+.conferenceView.hasScreenShare {
+    grid-template-columns: 1fr 300px;
+    grid-template-rows: auto;
+    grid-template-areas: 
+        "screen participants";
+}
 
+/* Screen share video container */
+.screenShareContainer {
+    grid-area: screen;
+    min-width: 0;
+    height: calc(100vh - 15vh);
+}
+
+/* Screen share video */
+.screenShareContainer video {
+    width: 100%;
+    height: 100%;
+    max-height: none;
+    object-fit: contain;
+}
+
+/* Participants container during screen share */
+.participantsContainer {
+    grid-area: participants;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    overflow-y: auto;
+}
+
+.participantsContainer video {
+    width: 100%;
+    height: auto;
+    max-height: 200px;
+}
+
+/* Chat room styles */
 .chatRoom {
     position: absolute;
     height: 90vh;
@@ -56,6 +93,7 @@
     border-radius: 10px;
     width: 30vw;
     padding-inline: 20px;
+    z-index: 15;
 }
 
 .chatContainer {
@@ -63,7 +101,44 @@
     height: 100%;
 }
 
+.chattingDisplay {
+    height: calc(100% - 120px);
+    overflow-y: auto;
+    padding: 10px;
+}
+
 .chattingArea {
     position: absolute;
     bottom: 0;
+    width: calc(100% - 40px);
+    padding: 20px 0;
+    display: flex;
+    gap: 10px;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    .conferenceView.hasScreenShare {
+        grid-template-columns: 1fr;
+        grid-template-areas: 
+            "screen"
+            "participants";
+    }
+
+    .participantsContainer {
+        flex-direction: row;
+        overflow-x: auto;
+        height: 150px;
+    }
+
+    .participantsContainer video {
+        width: 200px;
+        height: 150px;
+    }
+
+    .chatRoom {
+        width: 100vw;
+        height: 50vh;
+        bottom: 15vh;
+    }
 }
