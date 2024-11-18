@@ -1,8 +1,3 @@
-.meetVideoContainer {
-    position: relative;
-    height: 100vh;
-    background: rgb(1, 4, 48);
-}
 
 .meetUserVideo {
     position: absolute;
@@ -94,4 +89,35 @@
 
 .chatRoom + .conferenceView video:not([data-is-screenshare="true"]) {
     width: 8% !important;
+}
+/* Add this to your existing styles in videoComponent.module.css */
+
+.meetVideoContainer {
+    display: flex;
+    flex-direction: row;
+    height: 100vh; /* Ensure it takes the full height of the viewport */
+}
+
+.screenShareContainer {
+    width: 70%; /* Take 70% of the width for the screen share */
+    position: relative; /* Position relative to allow for absolute positioning of videos */
+}
+
+.participantsContainer {
+    width: 30%; /* Take 30% of the width for participant videos */
+    display: flex;
+    flex-direction: column;
+    align-items: center; /* Center align participants */
+    overflow-y: auto; /* Allow scrolling if there are too many participants */
+}
+
+.participantVideo {
+    width: 100%; /* Ensure participant videos take full width of their container */
+    margin: 5px 0; /* Add some spacing between participant videos */
+    border: 1px solid #ccc; /* Optional: Add a border for visibility */
+}
+
+.video {
+    width: 100%; /* Ensure video elements take full width */
+    height: auto; /* Maintain aspect ratio */
 }
