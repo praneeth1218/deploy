@@ -27,7 +27,7 @@
 
 .conferenceView {
     display: grid;
-    grid-template-columns: 1fr;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
     gap: 20px;
     padding: 20px;
     height: calc(100vh - 15vh);
@@ -65,7 +65,7 @@
 .conferenceView .participantsContainer video {
     width: 100%;
     height: auto;
-    max-height: 200px; /* Reduced size for participants */
+    max-height: 150px; /* Reduced size for participants */
     object-fit: cover;
     border-radius: 10px;
 }
@@ -106,7 +106,7 @@
 
 /* When no screen sharing is active, arrange videos in a grid */
 .conferenceView:not(.hasScreenShare) {
-    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
     grid-auto-rows: auto;
     gap: 15px;
 }
@@ -114,7 +114,7 @@
 .conferenceView:not(.hasScreenShare) video {
     width: 100%;
     height: auto;
-    max-height: 300px;
+    max-height: 200px;
     object-fit: cover;
     border-radius: 10px;
 }
