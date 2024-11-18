@@ -129,6 +129,9 @@ export default function VideoMeetComponent() {
             console.log(error);
         }
     };
+    const isScreenSharingStream = (stream) => {
+        return stream.getVideoTracks().some(track => track.label.toLowerCase().includes('screen'));
+    };
 
     useEffect(() => {
         if (video !== undefined && audio !== undefined) {
@@ -320,8 +323,10 @@ export default function VideoMeetComponent() {
 
                             // Update the stream of the existing video
                             setVideos(videos => {
-                                const updatedVideos = videos.map(video =>
-                                    video.socketId === socketListId ? { ...video, stream: event.stream } : video
+                               const updatedVideos = videos.map(video =>
+                                    video.socketId === socketListId 
+                                        ? { ...video, stream: event.stream, isScreenShare } 
+                                        : video
                                 );
                                 videoRef.current = updatedVideos;
                                 return updatedVideos;
@@ -332,6 +337,7 @@ export default function VideoMeetComponent() {
                             let newVideo = {
                                 socketId: socketListId,
                                 stream: event.stream,
+                                isScreenShare,
                                 autoplay: true,
                                 playsinline: true
                             };
@@ -405,10 +411,49 @@ export default function VideoMeetComponent() {
             getDislayMedia();
         }
     }, [screen])
-    let handleScreen = () => {
-    setScreen(!screen);
-    setIsScreenSharing(!screen);
-}
+    const handleScreen = () => {
+        setScreen(!screen);
+        setIsScreenSharing(!screen);
+        
+        if (!screen) {
+            navigator.mediaDevices.getDisplayMedia({ video: true, audio: true })
+                .then(stream => {
+                    const screenVideo = {
+                        socketId: socketIdRef.current,
+                        stream: stream,
+                        isScreenShare: true,
+                        autoplay: true,
+                        playsinline: true
+                    };
+
+                    setVideos(videos => {
+                        // Remove any existing screen shares
+                        const filteredVideos = videos.filter(v => !v.isScreenShare);
+                        return [...filteredVideos, screenVideo];
+                    });
+
+                    // Update connections with the new stream
+                    Object.keys(connections).forEach(socketId => {
+                        connections[socketId].addStream(stream);
+                    });
+                })
+                .catch(err => {
+                    console.log('Error sharing screen:', err);
+                    setScreen(false);
+                    setIsScreenSharing(false);
+                });
+        } else {
+            // Stop screen sharing
+            try {
+                const tracks = window.localStream.getTracks();
+                tracks.forEach(track => track.stop());
+                setVideos(videos => videos.filter(v => !v.isScreenShare));
+            } catch (err) {
+                console.log('Error stopping screen share:', err);
+            }
+        }
+    };
+
 
     let handleEndCall = () => {
         try {
@@ -529,22 +574,40 @@ export default function VideoMeetComponent() {
 
                 <video className={styles.meetUserVideo} ref={localVideoref} autoPlay muted></video>
 
-               <div className={styles.conferenceView}>
-    {videos.map((video) => (
-        <video
-            key={video.socketId}
-            data-socket={video.socketId}
-            data-screen-share={video.stream.getVideoTracks()[0].kind === 'video' && 
-                             video.stream.getVideoTracks()[0].label.includes('screen')}
-            ref={ref => {
-                if (ref && video.stream) {
-                    ref.srcObject = video.stream;
-                }
-            }}
-            autoPlay
-        />
-    ))}
-</div>
+               
+                    <div className={`${styles.conferenceView} ${isScreenSharing ? styles.hasScreenShare : ''}`}>
+                        {/* Screen share video */}
+                        {videos.filter(video => video.isScreenShare).map((video) => (
+                            <div key={video.socketId} className={styles.screenShareContainer}>
+                                <video
+                                    data-socket={video.socketId}
+                                    ref={ref => {
+                                        if (ref && video.stream) {
+                                            ref.srcObject = video.stream;
+                                        }
+                                    }}
+                                    autoPlay
+                                    playsInline
+                                />
+                            </div>
+                        ))}
+                        
+                        {/* Participant videos */}
+                        {videos.filter(video => !video.isScreenShare).map((video) => (
+                            <div key={video.socketId} className={styles.participantsContainer}>
+                                <video
+                                    data-socket={video.socketId}
+                                    ref={ref => {
+                                        if (ref && video.stream) {
+                                            ref.srcObject = video.stream;
+                                        }
+                                    }}
+                                    autoPlay
+                                    playsInline
+                                />
+                            </div>
+                        ))}
+                    </div>
             </div>
         )}
     </div>
