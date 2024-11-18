@@ -559,16 +559,17 @@ export default function VideoMeetComponent() {
         </>
     ) : (
         videos.map((video) => (
-            <video
-                key={video.socketId}
-                data-socket={video.socketId}
-                ref={ref => {
-                    if (ref && video.stream) {
-                        ref.srcObject = video.stream;
-                    }
-                }}
-                autoPlay
-            />
+           <video
+    data-socket={video.socketId}
+    data-is-screenshare={video.stream.getVideoTracks()[0].label.includes('screen') ? "true" : "false"}
+    ref={ref => {
+        if (ref && video.stream) {
+            ref.srcObject = video.stream;
+        }
+    }}
+    autoPlay
+>
+</video>
         ))
     )}
 </div>
