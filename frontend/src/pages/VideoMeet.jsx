@@ -510,9 +510,33 @@ export default function VideoMeetComponent() {
                         {audio === true ? <MicIcon /> : <MicOffIcon />}
                     </IconButton>
                     {screenAvailable === true && (
-                        <IconButton onClick={startScreenShare} style={{ color: "white" }}>
-                            {isScreenSharing ? <StopScreenShareIcon /> : <ScreenShareIcon />}
-                        </IconButton>
+                        <IconButton
+    onClick={async () => {
+        if (!isScreenSharing) {
+            try {
+                const screenStream = await navigator.mediaDevices.getDisplayMedia({ video: true });
+                sharedScreenRef.current.srcObject = screenStream;
+                setIsScreenSharing(true);
+
+                // Stop sharing when the user ends the stream
+                screenStream.getVideoTracks()[0].onended = () => {
+                    setIsScreenSharing(false);
+                    sharedScreenRef.current.srcObject = null;
+                };
+            } catch (error) {
+                console.error("Error starting screen share:", error);
+            }
+        } else {
+            // Stop screen sharing
+            setIsScreenSharing(false);
+            sharedScreenRef.current.srcObject = null;
+        }
+    }}
+    style={{ color: "white" }}
+>
+    {isScreenSharing ? <StopScreenShareIcon /> : <ScreenShareIcon />}
+</IconButton>
+
                     )}
                     <Badge badgeContent={newMessages} max={999} color="orange">
                         <IconButton onClick={() => setModal(!showModal)} style={{ color: "white" }}>
