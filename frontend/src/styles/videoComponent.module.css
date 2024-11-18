@@ -26,7 +26,6 @@
     font-size: 3rem;
 }
 
-/* Regular conference view */
 .conferenceView {
     display: flex;
     flex-wrap: wrap;
@@ -37,30 +36,22 @@
     height: calc(100vh - 15vh);
 }
 
+/* Regular video styling */
 .conferenceView video {
     width: 30vw;
     height: auto;
     border-radius: 10px;
 }
 
-/* When screen sharing is active */
-.hasScreenShare {
-    display: flex;
-    flex-direction: row;
-    flex-wrap: wrap;
-    padding: 20px;
-    gap: 10px;
-}
-
-/* The screen share video */
-.hasScreenShare video:first-child {
-    width: 75%;
-    height: 75vh;
+/* Style for the video element that contains screen share stream */
+[data-screen-share="true"] {
+    width: 75% !important;
+    height: 75vh !important;
     object-fit: contain;
 }
 
-/* Other participant videos when screen sharing */
-.hasScreenShare video:not(:first-child) {
+/* Other participants when there's a screen share */
+[data-screen-share="true"] ~ video {
     width: 20%;
     height: auto;
     max-height: 20vh;
