@@ -97,7 +97,7 @@
     flex-direction: row;
     height: 100vh; /* Ensure it takes the full height of the viewport */
     position: relative;
-    background: rgb(1, 4, 48);
+    background: rgb(1, 4, 48); /* Set the background color */
 }
 
 .screenShareContainer {
