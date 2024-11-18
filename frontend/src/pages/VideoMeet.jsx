@@ -522,11 +522,13 @@ export default function VideoMeetComponent() {
 
                 <video className={styles.meetUserVideo} ref={localVideoref} autoPlay muted></video>
 
-                <div className={`${styles.conferenceView} ${isScreenSharing ? styles.hasScreenShare : ''}`}>
-                    {videos.map((video) => (
-                         <video
+               <div className={styles.conferenceView}>
+    {videos.map((video) => (
+        <video
             key={video.socketId}
             data-socket={video.socketId}
+            data-screen-share={video.stream.getVideoTracks()[0].kind === 'video' && 
+                             video.stream.getVideoTracks()[0].label.includes('screen')}
             ref={ref => {
                 if (ref && video.stream) {
                     ref.srcObject = video.stream;
@@ -534,8 +536,8 @@ export default function VideoMeetComponent() {
             }}
             autoPlay
         />
-                    ))}
-                </div>
+    ))}
+</div>
             </div>
         )}
     </div>
