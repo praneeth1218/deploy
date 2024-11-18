@@ -319,43 +319,37 @@ export default function VideoMeetComponent() {
                     }
 
                     // Wait for their video stream
-                    connections[socketListId].onaddstream = (event) => {
-                        console.log("BEFORE:", videoRef.current);
-                        console.log("FINDING ID: ", socketListId);
+                  connections[socketListId].onaddstream = (event) => {
+        const isScreenSharing = isScreenSharingStream(event.stream);
+        
+        let videoExists = videoRef.current.find(video => video.socketId === socketListId);
 
-                        let videoExists = videoRef.current.find(video => video.socketId === socketListId);
+        if (videoExists) {
+            setVideos(videos => {
+                const updatedVideos = videos.map(video =>
+                    video.socketId === socketListId 
+                        ? { ...video, stream: event.stream, isScreenShare: isScreenSharing } 
+                        : video
+                );
+                videoRef.current = updatedVideos;
+                return updatedVideos;
+            });
+        } else {
+            let newVideo = {
+                socketId: socketListId,
+                stream: event.stream,
+                isScreenShare: isScreenSharing,
+                autoplay: true,
+                playsinline: true
+            };
 
-                        if (videoExists) {
-                            console.log("FOUND EXISTING");
-
-                            // Update the stream of the existing video
-                            setVideos(videos => {
-                               const updatedVideos = videos.map(video =>
-                                    video.socketId === socketListId 
-                                        ? { ...video, stream: event.stream, isScreenShare } 
-                                        : video
-                                );
-                                videoRef.current = updatedVideos;
-                                return updatedVideos;
-                            });
-                        } else {
-                            // Create a new video
-                            console.log("CREATING NEW");
-                            let newVideo = {
-                                socketId: socketListId,
-                                stream: event.stream,
-                                isScreenShare,
-                                autoplay: true,
-                                playsinline: true
-                            };
-
-                            setVideos(videos => {
-                                const updatedVideos = [...videos, newVideo];
-                                videoRef.current = updatedVideos;
-                                return updatedVideos;
-                            });
-                        }
-                    };
+            setVideos(videos => {
+                const updatedVideos = [...videos, newVideo];
+                videoRef.current = updatedVideos;
+                return updatedVideos;
+            });
+        }
+    };
 
 
                     // Add the local video stream
@@ -418,9 +412,9 @@ export default function VideoMeetComponent() {
             getDislayMedia();
         }
     }, [screen])
-    const handleScreen = () => {
+     const handleScreen = () => {
         setScreen(!screen);
-        setIsScreenSharing(!screen);
+        setIsScreenShare(!screen); // Update the isScreenShare state
         
         if (!screen) {
             navigator.mediaDevices.getDisplayMedia({ video: true, audio: true })
@@ -447,7 +441,7 @@ export default function VideoMeetComponent() {
                 .catch(err => {
                     console.log('Error sharing screen:', err);
                     setScreen(false);
-                    setIsScreenSharing(false);
+                    setIsScreenShare(false);
                 });
         } else {
             // Stop screen sharing
@@ -455,12 +449,12 @@ export default function VideoMeetComponent() {
                 const tracks = window.localStream.getTracks();
                 tracks.forEach(track => track.stop());
                 setVideos(videos => videos.filter(v => !v.isScreenShare));
+                setIsScreenShare(false);
             } catch (err) {
                 console.log('Error stopping screen share:', err);
             }
         }
     };
-
 
     let handleEndCall = () => {
         try {
