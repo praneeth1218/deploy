@@ -19,6 +19,7 @@
     width: 100vw;
     bottom: 0;
     text-align: center;
+    z-index: 20;
 }
 
 .buttonContainers svg {
@@ -29,17 +30,15 @@
 .conferenceView { 
     display: flex;
     flex-wrap: wrap; 
-    justify-content: flex-start; 
-    align-items: flex-start; 
-    padding: 10px;
-    gap: 10px;
+    padding: 20px;
+    gap: 15px;
     height: calc(100vh - 15vh); 
     overflow-y: auto; 
 }
 
-/* Default video size */
+/* Default video size when no screen sharing */
 .conferenceView video {
-    width: 30vw; 
+    width: 32%; 
     height: auto; 
     min-width: 200px;
     max-height: 40vh;
@@ -47,18 +46,41 @@
     transition: all 0.3s ease;
 }
 
-/* Special styling for screen share video */
-.conferenceView video[data-screen-share="true"] {
-    width: 65vw;
-    max-height: 70vh;
-    order: -1; /* Makes sure screen share is first */
+/* Layout when screen sharing is active */
+.conferenceView.hasScreenShare {
+    display: grid;
+    grid-template-columns: 65% 33%;
+    gap: 2%;
+    padding: 20px;
 }
 
-/* Adjust other videos when screen sharing is active */
-.conferenceView.hasScreenShare video:not([data-screen-share="true"]) {
-    width: calc(30vw - 20px);
+/* Screen share video */
+.conferenceView.hasScreenShare .screenShareContainer {
+    grid-column: 1;
+    width: 100%;
+}
+
+.conferenceView.hasScreenShare .screenShareContainer video {
+    width: 100%;
+    max-height: 80vh;
+    object-fit: contain;
+}
+
+/* Container for participant videos */
+.conferenceView.hasScreenShare .participantsContainer {
+    grid-column: 2;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    max-height: 80vh;
+    overflow-y: auto;
+}
+
+/* Participant videos when screen sharing */
+.conferenceView.hasScreenShare .participantsContainer video {
+    width: 100%;
     max-height: 25vh;
-    margin-left: 10px;
+    object-fit: cover;
 }
 
 .chatRoom {
@@ -69,7 +91,7 @@
     border-radius: 10px;
     width: 30vw;
     padding-inline: 20px;
-    z-index: 20;
+    z-index: 30;
 }
 
 .chatContainer {
@@ -93,10 +115,7 @@
 }
 
 /* Adjust layout when chat is open */
-.chatRoom + .conferenceView video[data-screen-share="true"] {
-    width: 45vw;
-}
-
-.chatRoom + .conferenceView.hasScreenShare video:not([data-screen-share="true"]) {
-    width: calc(20vw - 20px);
+.chatRoom + .conferenceView.hasScreenShare {
+    grid-template-columns: 50% 18%;
+    padding-right: 32%;
 }
