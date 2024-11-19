@@ -5,7 +5,7 @@
     overflow: hidden;
 }
 
-.meetUserVideo {
+.meetUser Video {
     position: absolute;
     bottom: 10vh;
     height: 15vh;
@@ -49,7 +49,7 @@
 /* Screen sharing layout */
 .conferenceView.hasScreenShare {
     display: grid !important;
-    grid-template-columns: 70% 30% !important;
+    grid-template-columns: 70% 30% !important; /* 70% for screen share, 30% for participants */
     gap: 20px !important;
     height: calc(100vh - 15vh) !important;
     width: 100% !important;
@@ -67,9 +67,9 @@
 .conferenceView.hasScreenShare .screenShareContainer video {
     width: 100% !important;
     height: auto !important;
-    max-height: 85vh !important;
-    max-width: none !important;
-    object-fit: contain !important;
+    max-height: 85vh !important; /* Full height for screen share */
+    max-width: none !important; /* Allow full width */
+    object-fit: contain !important; /* Maintain aspect ratio */
 }
 
 .conferenceView.hasScreenShare .participantsContainer {
@@ -77,17 +77,17 @@
     display: flex !important;
     flex-direction: column !important;
     gap: 10px !important;
-    overflow-y: auto !important;
-    max-height: 85vh !important;
-    padding-right: 10px !important;
+    overflow-y: auto !important; /* Allow scrolling */
+    max-height: 85vh !important; /* Limit height */
+    padding-right: 10px !important; /* Add padding */
 }
 
 .conferenceView.hasScreenShare .participantsContainer video {
-    width: 100% !important;
-    height: auto !important;
-    max-height: 150px !important;
-    object-fit: cover !important;
-    border-radius: 10px !important;
+    width: 100% !important; /* Full width for participant videos */
+    height: auto !important; /* Maintain aspect ratio */
+    max-height: 150px !important; /* Limit height for participants */
+    object-fit: cover !important; /* Cover for participants */
+    border-radius: 10px !important; /* Rounded corners */
 }
 
 /* Chat room styles */
@@ -97,15 +97,15 @@
     right: 0;
     background: white;
     border-radius: 10px;
-    width: 30vw;
+    width: 30vw; /* Width for chat room */
     padding-inline: 20px;
     z-index: 20;
 }
 
 /* Adjust layout when chat is open */
 .chatRoom + .conferenceView.hasScreenShare {
-    grid-template-columns: 50% 20% !important;
-    padding-right: 32%;
+    grid-template-columns: 50% 20% !important; /* Adjust grid layout */
+    padding-right: 32%; /* Padding adjustment for chat */
 }
 
 .chatContainer {
@@ -120,7 +120,7 @@
 }
 
 .chattingDisplay {
-    height: calc(90vh - 200px);
-    overflow-y: auto;
-    padding: 20px 0;
+    height: calc(90vh - 200px); /* Adjust height for chat display */
+    overflow-y: auto; /* Allow scrolling */
+    padding: 20px 0; /* Padding for chat display */
 }
