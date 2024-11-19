@@ -48,46 +48,46 @@
 
 /* Screen sharing layout */
 .conferenceView.hasScreenShare {
-    display: grid;
+    display: grid !important;
     grid-template-columns: 70% 30% !important;
-    gap: 20px;
-    height: calc(100vh - 15vh);
-    width: 100%;
+    gap: 20px !important;
+    height: calc(100vh - 15vh) !important;
+    width: 100% !important;
 }
 
 .conferenceView.hasScreenShare .screenShareContainer {
-    grid-column: 1;
-    max-height: 85vh;
-    width: 100%;
-    display: flex;
-    justify-content: center;
-    align-items: center;
+    grid-column: 1 !important;
+    max-height: 85vh !important;
+    width: 100% !important;
+    display: flex !important;
+    justify-content: center !important;
+    align-items: center !important;
 }
 
 .conferenceView.hasScreenShare .screenShareContainer video {
-    width: 100%;
-    height: auto;
-    max-height: 85vh;
-    max-width: none;
-    object-fit: contain;
+    width: 100% !important;
+    height: auto !important;
+    max-height: 85vh !important;
+    max-width: none !important;
+    object-fit: contain !important;
 }
 
 .conferenceView.hasScreenShare .participantsContainer {
-    grid-column: 2;
-    display: flex;
-    flex-direction: column;
-    gap: 10px;
-    overflow-y: auto;
-    max-height: 85vh;
-    padding-right: 10px;
+    grid-column: 2 !important;
+    display: flex !important;
+    flex-direction: column !important;
+    gap: 10px !important;
+    overflow-y: auto !important;
+    max-height: 85vh !important;
+    padding-right: 10px !important;
 }
 
 .conferenceView.hasScreenShare .participantsContainer video {
-    width: 100%;
-    height: auto;
-    max-height: 150px;
-    object-fit: cover;
-    border-radius: 10px;
+    width: 100% !important;
+    height: auto !important;
+    max-height: 150px !important;
+    object-fit: cover !important;
+    border-radius: 10px !important;
 }
 
 /* Chat room styles */
