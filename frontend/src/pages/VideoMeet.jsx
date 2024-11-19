@@ -552,7 +552,7 @@ export default function VideoMeetComponent() {
 <div className={`${styles.conferenceView} ${videos.some(v => v.isScreenShare) ? styles.hasScreenShare : ''}`}>
     {videos.some(v => v.isScreenShare) ? (
         <>
-            <div className={screenShareContainer}>
+            <div className={styles.screenShareContainer}>
                 {videos.filter(v => v.isScreenShare).map((video) => (
                     <video
                         key={video.socketId}
