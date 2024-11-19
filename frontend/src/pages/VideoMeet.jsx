@@ -454,44 +454,45 @@ export default function VideoMeetComponent() {
         }
     };
       const renderVideos = () => {
-        const hasScreenShare = videos.some(v => v.isScreenShare);
-        const screenShare = videos.find(v => v.isScreenShare);
-        const participants = videos.filter(v => !v.isScreenShare);
+    const hasScreenShare = videos.some(v => v.isScreenShare);
+    const screenShare = videos.find(v => v.isScreenShare);
+    const participants = videos.filter(v => !v.isScreenShare);
 
-        if (hasScreenShare) {
-            return (
-                <div className={`${styles.conferenceView} ${styles.hasScreenShare}`}>
-                    <div className={styles.screenShareContainer}>
-                        <video
-                            key={screenShare.socketId}
-                            data-socket={screenShare.socketId}
-                            ref={ref => {
-                                if (ref && screenShare.stream) {
-                                    ref.srcObject = screenShare.stream;
-                                }
-                            }}
-                            autoPlay
-                            playsInline
-                        />
-                    </div>
-                    <div className={styles.participantsContainer}>
-                        {participants.map((video) => (
-                            <video
-                                key={video.socketId}
-                                data-socket={video.socketId}
-                                ref={ref => {
-                                    if (ref && video.stream) {
-                                        ref.srcObject = video.stream;
-                                    }
-                                }}
-                                autoPlay
-                                playsInline
-                            />
-                        ))}
-                    </div>
+    return (
+        <div className={`${styles.conferenceView} ${hasScreenShare ? styles.hasScreenShare : ''}`}>
+            {hasScreenShare && (
+                <div className={styles.screenShareContainer}>
+                    <video
+                        key={screenShare.socketId}
+                        data-socket={screenShare.socketId}
+                        ref={ref => {
+                            if (ref && screenShare.stream) {
+                                ref.srcObject = screenShare.stream;
+                            }
+                        }}
+                        autoPlay
+                        playsInline
+                    />
                 </div>
-            );
-        }
+            )}
+            <div className={styles.participantsContainer}>
+                {participants.map((video) => (
+                    <video
+                        key={video.socketId}
+                        data-socket={video.socketId}
+                        ref={ref => {
+                            if (ref && video.stream) {
+                                ref.srcObject = video.stream;
+                            }
+                        }}
+                        autoPlay
+                        playsInline
+                    />
+                ))}
+            </div>
+        </div>
+    );
+};
 
         return (
             <div className={styles.conferenceView}>
