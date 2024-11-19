@@ -453,15 +453,15 @@ export default function VideoMeetComponent() {
             setNewMessages((prevNewMessages) => prevNewMessages + 1);
         }
     };
-     const renderVideos = () => {
+         const renderVideos = () => {
         const hasScreenShare = videos.some(v => v.isScreenShare);
         const screenShare = videos.find(v => v.isScreenShare);
         const participants = videos.filter(v => !v.isScreenShare);
 
         return (
-            <div className={`${styles.conferenceView} ${hasScreenShare ? styles.hasScreenShare : ''}`}>
+            <div className={`conferenceView ${hasScreenShare ? 'hasScreenShare' : ''}`}>
                 {hasScreenShare && (
-                    <div className={styles.screenShareContainer}>
+                    <div className="screenShareContainer">
                         <video
                             key={screenShare.socketId}
                             data-socket={screenShare.socketId}
@@ -472,10 +472,17 @@ export default function VideoMeetComponent() {
                             }}
                             autoPlay
                             playsInline
+                            style={{
+                                width: '100%', // Override with internal styles
+                                height: 'auto',
+                                maxHeight: '85vh',
+                                objectFit: 'contain',
+                                borderRadius: '10px',
+                            }}
                         />
                     </div>
                 )}
-                <div className={styles.participantsContainer}>
+                <div className="participantsContainer">
                     {participants.map((video) => (
                         <video
                             key={video.socketId}
@@ -487,11 +494,12 @@ export default function VideoMeetComponent() {
                             }}
                             autoPlay
                             playsInline
+                            className="participantVideo" // Use external CSS for participants
                         />
                     ))}
                 </div>
             </div>
- );
+        );
     };
 
     let sendMessage = () => {
