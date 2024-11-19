@@ -453,7 +453,7 @@ export default function VideoMeetComponent() {
             setNewMessages((prevNewMessages) => prevNewMessages + 1);
         }
     };
-         const renderVideos = () => {
+             const renderVideos = () => {
         const hasScreenShare = videos.some(v => v.isScreenShare);
         const screenShare = videos.find(v => v.isScreenShare);
         const participants = videos.filter(v => !v.isScreenShare);
@@ -472,13 +472,7 @@ export default function VideoMeetComponent() {
                             }}
                             autoPlay
                             playsInline
-                            style={{
-                                width: '100%', // Override with internal styles
-                                height: 'auto',
-                                maxHeight: '85vh',
-                                objectFit: 'contain',
-                                borderRadius: '10px',
-                            }}
+                            className="screenShareVideo" // Use class for screen share styling
                         />
                     </div>
                 )}
@@ -494,7 +488,7 @@ export default function VideoMeetComponent() {
                             }}
                             autoPlay
                             playsInline
-                            className="participantVideo" // Use external CSS for participants
+                            className="participantVideo" // Use class for participant styling
                         />
                     ))}
                 </div>
