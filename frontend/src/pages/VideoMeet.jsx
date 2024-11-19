@@ -453,7 +453,7 @@ export default function VideoMeetComponent() {
             setNewMessages((prevNewMessages) => prevNewMessages + 1);
         }
     };
-      const renderVideos = () => {
+     const renderVideos = () => {
     const hasScreenShare = videos.some(v => v.isScreenShare);
     const screenShare = videos.find(v => v.isScreenShare);
     const participants = videos.filter(v => !v.isScreenShare);
@@ -493,26 +493,6 @@ export default function VideoMeetComponent() {
         </div>
     );
 };
-
-        return (
-            <div className={styles.conferenceView}>
-                {videos.map((video) => (
-                    <video
-                        key={video.socketId}
-                        data-socket={video.socketId}
-                        ref={ref => {
-                            if (ref && video.stream) {
-                                ref.srcObject = video.stream;
-                            }
-                        }}
-                        autoPlay
-                        playsInline
-                    />
-                ))}
-            </div>
-        );
-    };
-
 
 
     let sendMessage = () => {
